@@ -25,6 +25,23 @@ namespace Cowork.Controllers
             return View(clientes);
         }
 
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var cliente = await _context.Clientes
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (cliente == null)
+            {
+                return NotFound();
+            }
+
+            return View(cliente);
+        }
+
         public IActionResult Create()
         {
             return View();
