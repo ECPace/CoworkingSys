@@ -10,19 +10,19 @@ using Cowork.Models;
 
 namespace Cowork.Controllers
 {
-    public class ClienteController : Controller
+    public class SalaController : Controller
     {
         private readonly CoworkContext _context;
 
-        public ClienteController(CoworkContext context)
+        public SalaController(CoworkContext context)
         {
             _context = context;
         }
 
         public async Task<IActionResult> Index()
         {
-            var clientes = await _context.Clientes.ToListAsync();
-            return View(clientes);
+            var salas = await _context.Salas.ToListAsync();
+            return View(salas);
         }
 
         public IActionResult Create()
@@ -32,15 +32,15 @@ namespace Cowork.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Cliente cliente)
+        public async Task<IActionResult> Create(Sala sala)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(cliente);
+                _context.Add(sala);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(cliente);
+            return View(sala);
         }
 
         public async Task<IActionResult> Edit(int? id)
@@ -48,37 +48,37 @@ namespace Cowork.Controllers
             if (id == null)
                 return NotFound();
 
-            var cliente = await _context.Clientes.FindAsync(id);
-            if (cliente == null)
+            var sala = await _context.Salas.FindAsync(id);
+            if (sala == null)
                 return NotFound();
 
-            return View(cliente);
+            return View(sala);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Cliente cliente)
+        public async Task<IActionResult> Edit(int id, Sala sala)
         {
-            if (id != cliente.Id)
+            if (id != sala.Id)
                 return NotFound();
 
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _context.Update(cliente);
+                    _context.Update(sala);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!_context.Clientes.Any(e => e.Id == cliente.Id))
+                    if (!_context.Salas.Any(e => e.Id == sala.Id))
                         return NotFound();
                     else
                         throw;
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(cliente);
+            return View(sala);
         }
 
         public async Task<IActionResult> Delete(int? id)
@@ -86,19 +86,19 @@ namespace Cowork.Controllers
             if (id == null)
                 return NotFound();
 
-            var cliente = await _context.Clientes.FirstOrDefaultAsync(m => m.Id == id);
-            if (cliente == null)
+            var sala = await _context.Salas.FirstOrDefaultAsync(m => m.Id == id);
+            if (sala == null)
                 return NotFound();
 
-            return View(cliente);
+            return View(sala);
         }
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var cliente = await _context.Clientes.FindAsync(id);
-            _context.Clientes.Remove(cliente);
+            var sala = await _context.Salas.FindAsync(id);
+            _context.Salas.Remove(sala);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }

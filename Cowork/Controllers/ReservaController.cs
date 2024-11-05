@@ -10,37 +10,39 @@ using Cowork.Models;
 
 namespace Cowork.Controllers
 {
-    public class ClienteController : Controller
+    public class ReservaController : Controller
     {
         private readonly CoworkContext _context;
 
-        public ClienteController(CoworkContext context)
+        public ReservaController(CoworkContext context)
         {
             _context = context;
         }
 
         public async Task<IActionResult> Index()
         {
-            var clientes = await _context.Clientes.ToListAsync();
-            return View(clientes);
+            var reservas = _context.Reservas.Include(r => r.Cliente).Include(r => r.Sala);
+            return View(await reservas.ToListAsync());
         }
 
         public IActionResult Create()
         {
+            ViewBag.Clientes = _context.Clientes.ToList();
+            ViewBag.Salas = _context.Salas.ToList();
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Cliente cliente)
+        public async Task<IActionResult> Create(Reserva reserva)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(cliente);
+                _context.Add(reserva);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(cliente);
+            return View(reserva);
         }
 
         public async Task<IActionResult> Edit(int? id)
@@ -48,37 +50,39 @@ namespace Cowork.Controllers
             if (id == null)
                 return NotFound();
 
-            var cliente = await _context.Clientes.FindAsync(id);
-            if (cliente == null)
+            var reserva = await _context.Reservas.FindAsync(id);
+            if (reserva == null)
                 return NotFound();
 
-            return View(cliente);
+            ViewBag.Clientes = _context.Clientes.ToList();
+            ViewBag.Salas = _context.Salas.ToList();
+            return View(reserva);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Cliente cliente)
+        public async Task<IActionResult> Edit(int id, Reserva reserva)
         {
-            if (id != cliente.Id)
+            if (id != reserva.Id)
                 return NotFound();
 
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _context.Update(cliente);
+                    _context.Update(reserva);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!_context.Clientes.Any(e => e.Id == cliente.Id))
+                    if (!_context.Reservas.Any(e => e.Id == reserva.Id))
                         return NotFound();
                     else
                         throw;
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(cliente);
+            return View(reserva);
         }
 
         public async Task<IActionResult> Delete(int? id)
@@ -86,19 +90,23 @@ namespace Cowork.Controllers
             if (id == null)
                 return NotFound();
 
-            var cliente = await _context.Clientes.FirstOrDefaultAsync(m => m.Id == id);
-            if (cliente == null)
+            var reserva = await _context.Reservas
+                .Include(r => r.Cliente)
+                .Include(r => r.Sala)
+                .FirstOrDefaultAsync(m => m.Id == id);
+
+            if (reserva == null)
                 return NotFound();
 
-            return View(cliente);
+            return View(reserva);
         }
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var cliente = await _context.Clientes.FindAsync(id);
-            _context.Clientes.Remove(cliente);
+            var reserva = await _context.Reservas.FindAsync(id);
+            _context.Reservas.Remove(reserva);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
