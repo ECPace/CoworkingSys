@@ -27,8 +27,8 @@ namespace Cowork.Controllers
 
         public IActionResult Create()
         {
-            ViewBag.Clientes = _context.Clientes.ToList();
-            ViewBag.Salas = _context.Salas.ToList();
+            ViewBag.ClienteId = new SelectList(_context.Clientes, "Id", "Nome");
+            ViewBag.SalaId = new SelectList(_context.Salas, "Id", "Nome");
             return View();
         }
 
@@ -36,12 +36,20 @@ namespace Cowork.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Reserva reserva)
         {
-            if (ModelState.IsValid)
-            {
-                _context.Add(reserva);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+            if (ModelState.IsValid) { 
+                try 
+                {
+                  _context.Add(reserva);
+                  await _context.SaveChangesAsync();
+                  return RedirectToAction(nameof(Index));
+                }
+                catch (Exception ex)
+                {
+                  ModelState.AddModelError(string.Empty, $"Erro ao salvar a reserva: {ex.Message}");
+                }
             }
+            ViewBag.ClienteId = new SelectList(_context.Clientes, "Id", "Nome");
+            ViewBag.SalaId = new SelectList(_context.Salas, "Id", "Nome");
             return View(reserva);
         }
 
@@ -54,8 +62,8 @@ namespace Cowork.Controllers
             if (reserva == null)
                 return NotFound();
 
-            ViewBag.Clientes = _context.Clientes.ToList();
-            ViewBag.Salas = _context.Salas.ToList();
+            ViewBag.ClienteId = new SelectList(_context.Clientes, "Id", "Nome");
+            ViewBag.SalaId = new SelectList(_context.Salas, "Id", "Nome");
             return View(reserva);
         }
 

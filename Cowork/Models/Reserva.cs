@@ -10,6 +10,6 @@
         public Cliente Cliente { get; set; }
         public int SalaId { get; set; }
         public Sala Sala { get; set; }
-        public ICollection<Funcionario> Funcionarios { get; set; }
+        public ICollection<Funcionario>? Funcionarios { get; set; }
     }
 }

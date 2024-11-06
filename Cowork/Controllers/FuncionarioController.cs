@@ -25,6 +25,23 @@ namespace Cowork.Controllers
             return View(funcionarios);
         }
 
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var funcionario = await _context.Funcionarios
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (funcionario == null)
+            {
+                return NotFound();
+            }
+
+            return View(funcionario);
+        }
+
         public IActionResult Create()
         {
             return View();

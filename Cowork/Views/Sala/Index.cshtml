@@ -1,0 +1,38 @@
+﻿@model IEnumerable<Cowork.Models.Sala>
+
+@{
+    ViewData["Title"] = "Lista de Salas";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Lista de Salas</h2>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Criar Nova Sala</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Nome</th>
+            <th>Capacidade</th>
+            <th>Preço por Hora</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.Nome)</td>
+                <td>@Html.DisplayFor(modelItem => item.Capacidade)</td>
+                <td>@Html.DisplayFor(modelItem => item.PrecoPorHora)</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Editar</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Detalhes</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Deletar</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,37 @@
+﻿@model Cowork.Models.Sala
+
+@{
+    ViewData["Title"] = "Detalhes da Sala";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Detalhes da Sala</h1>
+
+<div>
+    <h4>Sala</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            Nome
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Nome)
+        </dd>
+        <dt class="col-sm-2">
+            Capacidade
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Capacidade)
+        </dd>
+        <dt class="col-sm-2">
+            Preço por Hora
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.PrecoPorHora)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.Id">Editar</a> |
+    <a asp-action="Index">Voltar para a Lista</a>
+</div>
