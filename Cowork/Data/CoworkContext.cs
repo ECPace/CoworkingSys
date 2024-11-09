@@ -18,7 +18,7 @@ namespace Cowork.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            // Configuração para relacionamento N:M entre Reserva e Funcionario
+           // Configuração para relacionamento N:M entre Reserva e Funcionario
             modelBuilder.Entity<Reserva>()
                 .HasMany(r => r.Funcionarios)
                 .WithMany(f => f.Reservas)

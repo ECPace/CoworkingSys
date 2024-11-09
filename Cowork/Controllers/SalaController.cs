@@ -19,34 +19,34 @@ namespace Cowork.Controllers
             _context = context;
         }
 
+        // GET: Sala
         public async Task<IActionResult> Index()
         {
             var salas = await _context.Salas.ToListAsync();
             return View(salas);
         }
 
+        // GET: Sala/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
-            {
                 return NotFound();
-            }
 
-            var salas = await _context.Salas
+            var sala = await _context.Salas
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (salas == null)
-            {
+            if (sala == null)
                 return NotFound();
-            }
 
-            return View(salas);
+            return View(sala);
         }
 
+        // GET: Sala/Create
         public IActionResult Create()
         {
             return View();
         }
 
+        // POST: Sala/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Sala sala)
@@ -60,6 +60,7 @@ namespace Cowork.Controllers
             return View(sala);
         }
 
+        // GET: Sala/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -72,6 +73,7 @@ namespace Cowork.Controllers
             return View(sala);
         }
 
+        // POST: Sala/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, Sala sala)
@@ -98,6 +100,7 @@ namespace Cowork.Controllers
             return View(sala);
         }
 
+        // GET: Sala/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -110,6 +113,7 @@ namespace Cowork.Controllers
             return View(sala);
         }
 
+        // POST: Sala/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -118,6 +122,12 @@ namespace Cowork.Controllers
             _context.Salas.Remove(sala);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
+        }
+
+        // Método auxiliar para verificar se a sala existe
+        private bool SalaExists(int id)
+        {
+            return _context.Salas.Any(e => e.Id == id);
         }
     }
 }
