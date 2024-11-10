@@ -1,5 +1,4 @@
 ﻿@model Cowork.Models.Sala
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
 
 @{
     ViewData["Title"] = "Editar Sala";
@@ -16,21 +15,14 @@
     </div>
     <div class="form-group">
         <label asp-for="Capacidade" class="control-label"></label>
-        <input asp-for="Capacidade" class="form-control" />
+        <input asp-for="Capacidade" class="form-control" type="number" />
         <span asp-validation-for="Capacidade" class="text-danger"></span>
     </div>
     <div class="form-group">
         <label asp-for="PrecoPorHora" class="control-label"></label>
-        <input asp-for="PrecoPorHora" class="form-control" />
+        <input asp-for="PrecoPorHora" class="form-control" type="number" step="0.01" />
         <span asp-validation-for="PrecoPorHora" class="text-danger"></span>
     </div>
-
-    <!-- Mapa para definir as coordenadas da Sala -->
-    <div id="map" style="height: 400px;"></div>
-
-    <input type="hidden" asp-for="Latitude" id="Latitude" />
-    <input type="hidden" asp-for="Longitude" id="Longitude" />
-
     <div>
         <input type="submit" value="Salvar" class="btn btn-primary" />
     </div>
@@ -39,38 +31,3 @@
 <div>
     <a asp-action="Index">Voltar para a Lista</a>
 </div>
-
-<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        // Coordenadas iniciais (exemplo: UniFOA)
-        const initialPosition = [-22.4991957, -44.0345147];
-        const map = L.map("map").setView(initialPosition, 12);
-
-        // Carregar o mapa do OpenStreetMap
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            maxZoom: 19,
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        }).addTo(map);
-
-        // Adicionar marcador e definir coordenadas iniciais nos inputs
-        let marker = L.marker(initialPosition, { draggable: true }).addTo(map);
-        document.getElementById("Latitude").value = initialPosition[0];
-        document.getElementById("Longitude").value = initialPosition[1];
-
-        // Atualizar coordenadas ao mover o marcador
-        marker.on("dragend", function (e) {
-            const latLng = marker.getLatLng();
-            document.getElementById("Latitude").value = latLng.lat;
-            document.getElementById("Longitude").value = latLng.lng;
-        });
-
-        // Atualizar coordenadas ao clicar no mapa
-        map.on("click", function (e) {
-            marker.setLatLng(e.latlng);
-            document.getElementById("Latitude").value = e.latlng.lat;
-            document.getElementById("Longitude").value = e.latlng.lng;
-        });
-    });
-</script>
-
