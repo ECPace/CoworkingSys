@@ -32,11 +32,33 @@ namespace Cowork.Controllers
             return View();
         }
 
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var reserva = await _context.Reservas
+                .Include(r => r.Cliente)
+                .Include(r => r.Sala)
+                .Include(r => r.Funcionarios)
+                .FirstOrDefaultAsync(m => m.Id == id);
+
+            if (reserva == null)
+            {
+                return NotFound();
+            }
+
+            return View(reserva);
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Reserva reserva)
         {
-            if (ModelState.IsValid) { 
+            if (ModelState.IsValid) 
+            { 
                 try 
                 {
                   _context.Add(reserva);

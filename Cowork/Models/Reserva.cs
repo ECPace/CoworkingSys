@@ -11,5 +11,16 @@
         public int SalaId { get; set; }
         public Sala? Sala { get; set; }
         public ICollection<Funcionario>? Funcionarios { get; set; }
+        public decimal ValorTotal
+        {
+            get
+            {
+                if (Sala == null) return 0;
+
+                // Calcula a duração da reserva em horas
+                var duracaoHoras = (HorarioFim - HorarioInicio).TotalHours;
+                return (decimal)duracaoHoras * Sala.PrecoPorHora;
+            }
+        }
     }
 }
