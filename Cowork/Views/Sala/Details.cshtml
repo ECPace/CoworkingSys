@@ -7,42 +7,7 @@
 
 <h1>Detalhes da Sala</h1>
 
-<div>
-    <h4>Sala</h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Nome)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Nome)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Capacidade)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Capacidade)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.PrecoPorHora)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.PrecoPorHora)
-        </dd>
-        <dt class="col-sm-2">
-            Latitude
-        </dt>
-        <dd class="col-sm-10">
-            @Model.Latitude
-        </dd>
-        <dt class="col-sm-2">
-            Longitude
-        </dt>
-        <dd class="col-sm-10">
-            @Model.Longitude
-        </dd>
-    </dl>
-</div>
+@Html.Partial("_SalaDetailsPartial", Model)
 
 <div>
     <a asp-action="Edit" asp-route-id="@Model.Id">Editar</a> |

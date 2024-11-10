@@ -1,44 +1,27 @@
 ﻿@model Cowork.Models.Sala
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
 
-@{
-    ViewData["Title"] = "Editar Sala";
-    Layout = "~/Views/Shared/_Layout.cshtml";
-}
-
-<h1>Editar Sala</h1>
-
-<form asp-action="Edit">
-    <div class="form-group">
-        <label asp-for="Nome" class="control-label"></label>
-        <input asp-for="Nome" class="form-control" />
-        <span asp-validation-for="Nome" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="Capacidade" class="control-label"></label>
-        <input asp-for="Capacidade" class="form-control" />
-        <span asp-validation-for="Capacidade" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="PrecoPorHora" class="control-label"></label>
-        <input asp-for="PrecoPorHora" class="form-control" />
-        <span asp-validation-for="PrecoPorHora" class="text-danger"></span>
-    </div>
-
-    <!-- Mapa para definir as coordenadas da Sala -->
-    <div id="map" style="height: 400px;"></div>
-
-    <input type="hidden" asp-for="Latitude" id="Latitude" />
-    <input type="hidden" asp-for="Longitude" id="Longitude" />
-
-    <div>
-        <input type="submit" value="Salvar" class="btn btn-primary" />
-    </div>
-</form>
-
-<div>
-    <a asp-action="Index">Voltar para a Lista</a>
+<div class="form-group">
+    <label asp-for="Nome" class="control-label"></label>
+    <input asp-for="Nome" class="form-control" />
+    <span asp-validation-for="Nome" class="text-danger"></span>
 </div>
+<div class="form-group">
+    <label asp-for="Capacidade" class="control-label"></label>
+    <input asp-for="Capacidade" class="form-control" />
+    <span asp-validation-for="Capacidade" class="text-danger"></span>
+</div>
+<div class="form-group">
+    <label asp-for="PrecoPorHora" class="control-label"></label>
+    <input asp-for="PrecoPorHora" class="form-control" />
+    <span asp-validation-for="PrecoPorHora" class="text-danger"></span>
+</div>
+
+<!-- Campos ocultos para armazenar Latitude e Longitude -->
+<input asp-for="Latitude" type="hidden" id="Latitude" />
+<input asp-for="Longitude" type="hidden" id="Longitude" />
+
+<div id="map" style="height: 400px; width: 100%; margin-bottom: 15px;"></div>
 
 <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
 <script>
@@ -73,4 +56,3 @@
         });
     });
 </script>
-

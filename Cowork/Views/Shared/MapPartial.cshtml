@@ -1,0 +1,41 @@
+﻿@model Cowork.Models.Sala
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+
+
+<div id="map" style="height: 400px;"></div>
+
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Coordenadas iniciais (exemplo: UniFOA)
+        const initialPosition = [-22.4991957, -44.0345147];
+        const map = L.map("map").setView(initialPosition, 12);
+
+        // Carregar o mapa do OpenStreetMap
+        L.tileLayer("https://{s}.tile.openstreetmap.org/%7Bz%7D/%7Bx%7D/%7By%7D.png", {
+            maxZoom: 19,
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        // Adicionar marcador e definir coordenadas iniciais nos inputs
+        let marker = L.marker(initialPosition, { draggable: true }).addTo(map);
+        document.getElementById("Latitude").value = initialPosition[0];
+        document.getElementById("Longitude").value = initialPosition[1];
+
+        // Atualizar coordenadas ao mover o marcador
+        marker.on("dragend", function (e) {
+            const latLng = marker.getLatLng();
+            document.getElementById("Latitude").value = latLng.lat;
+            document.getElementById("Longitude").value = latLng.lng;
+        });
+
+        // Atualizar coordenadas ao clicar no mapa
+        map.on("click", function (e) {
+            marker.setLatLng(e.latlng);
+            document.getElementById("Latitude").value = e.latlng.lat;
+            document.getElementById("Longitude").value = e.latlng.lng;
+        });
+    });
+</script>
+
