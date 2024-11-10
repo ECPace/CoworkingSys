@@ -6,10 +6,14 @@ namespace Cowork.Models
     {
         public int Id { get; set; }
 
+        [Required(ErrorMessage = "O nome é obrigatório.")]
         public string Nome { get; set; }
 
+        [Required(ErrorMessage = "O email é obrigatório.")]
+        [EmailAddress(ErrorMessage = "O email não é válido.")]
         public string Email { get; set; }
 
+        [Required(ErrorMessage = "O telefone é obrigatório.")]
         public string Telefone { get; set; }
         public ICollection<Reserva>? Reservas { get; set; }
     }

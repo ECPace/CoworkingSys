@@ -1,10 +1,15 @@
-﻿namespace Cowork.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Cowork.Models
 {
     public class Reserva
     {
         public int Id { get; set; }
+        [Required(ErrorMessage = "A data da reserva é obrigatória.")]
         public DateTime DataReserva { get; set; }
+        [Required(ErrorMessage = "O horário de início é obrigatório.")]
         public TimeSpan HorarioInicio { get; set; }
+        [Required(ErrorMessage = "O horário de fim é obrigatório.")]
         public TimeSpan HorarioFim { get; set; }
         public int ClienteId { get; set; }
         public Cliente? Cliente { get; set; }
