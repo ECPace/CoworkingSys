@@ -14,6 +14,7 @@ namespace Cowork.Models
         public string Email { get; set; }
 
         [Required(ErrorMessage = "O telefone é obrigatório.")]
+        [Phone(ErrorMessage = "O telefone não é válido.")]
         public string Telefone { get; set; }
         public ICollection<Reserva>? Reservas { get; set; }
     }
