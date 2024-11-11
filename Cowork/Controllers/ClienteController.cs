@@ -51,6 +51,15 @@ namespace Cowork.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Cliente cliente)
         {
+            if (_context.Clientes.Any(c => c.Email == cliente.Email))
+            {
+                ModelState.AddModelError("Email", "O email já está em uso.");
+            }
+            if (_context.Clientes.Any(c => c.Telefone == cliente.Telefone))
+            {
+                ModelState.AddModelError("Telefone", "O telefone já está em uso.");
+            }
+
             if (ModelState.IsValid)
             {
                 _context.Add(cliente);
