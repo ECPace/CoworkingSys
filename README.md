@@ -1,4 +1,5 @@
 Sistema de Reservas para Coworking
+
 Este é um sistema de gerenciamento de reservas para espaços de coworking, desenvolvido em ASP.NET Core. Ele permite cadastrar e gerenciar clientes, funcionários, salas e reservas, calculando automaticamente o valor da reserva com base na duração e no preço da sala. O sistema inclui uma funcionalidade de mapa para selecionar a localização das salas e faz uso de relacionamentos entre modelos para uma estrutura robusta de dados.
 
 Funcionalidades:
