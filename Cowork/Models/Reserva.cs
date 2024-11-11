@@ -30,6 +30,8 @@ namespace Cowork.Models
 
         public ICollection<Funcionario>? Funcionarios { get; set; }
 
+        public List<int> FuncionariosIds { get; set; } = new List<int>();
+
         public decimal ValorTotal
         {
             get

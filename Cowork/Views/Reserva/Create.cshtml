@@ -33,6 +33,11 @@
         <select asp-for="SalaId" asp-items="ViewBag.SalaId" class="form-control"></select>
         <span asp-validation-for="SalaId" class="text-danger"></span>
     </div>
+    <div class="form-group">
+        <label asp-for="FuncionariosIds" class="control-label">Funcionários</label>
+        <select asp-for="FuncionariosIds" class="form-control" asp-items="ViewBag.FuncionariosIds" multiple="multiple"></select>
+    </div>
+
     <div>
         <input type="submit" value="Salvar" class="btn btn-primary" />
     </div>
@@ -41,3 +46,14 @@
 <div>
     <a asp-action="Index">Voltar para a Lista</a>
 </div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#FuncionariosIds').select2({
+                placeholder: "Selecione os funcionários",
+                allowClear: true
+            });
+        });
+    </script>
+}
