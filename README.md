@@ -39,9 +39,3 @@ Controllers/ - Contém os controladores para gerenciar rotas e lógica de aplica
 Models/ - Define as classes e modelos de dados. |
 Views/ - Contém as views para interação com o usuário. |
 wwwroot/ - Recursos estáticos, como arquivos de CSS, JS, e mapas.
-
-Bugs conhecidos:
-
-Valor total só consegue calcular precisamente horários no mesmo dia (i.e 00:01 até 23:59) | 
-Emails iguais podem ser inseridos em clientes diferentes.
-Ainda não é possível selecionar quais funcionários pertecem a X reserva
