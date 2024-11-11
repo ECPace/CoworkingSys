@@ -25,13 +25,6 @@ namespace Cowork.Controllers
             return View(await reservas.ToListAsync());
         }
 
-        public IActionResult Create()
-        {
-            ViewBag.ClienteId = new SelectList(_context.Clientes, "Id", "Nome");
-            ViewBag.SalaId = new SelectList(_context.Salas, "Id", "Nome");
-            return View();
-        }
-
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -52,26 +45,45 @@ namespace Cowork.Controllers
 
             return View(reserva);
         }
+        public IActionResult Create()
+        {
+            ViewBag.ClienteId = new SelectList(_context.Clientes, "Id", "Nome");
+            ViewBag.SalaId = new SelectList(_context.Salas, "Id", "Nome");
+            ViewBag.FuncionariosIds = new MultiSelectList(_context.Funcionarios, "Id", "Nome");
+            return View();
+        }
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Reserva reserva)
         {
-            if (ModelState.IsValid) 
-            { 
-                try 
+            if (ModelState.IsValid)
+            {
+                try
                 {
-                  _context.Add(reserva);
-                  await _context.SaveChangesAsync();
-                  return RedirectToAction(nameof(Index));
+                    reserva.Funcionarios = new List<Funcionario>();
+                    foreach (var id in reserva.FuncionariosIds)
+                    {
+                        var funcionario = await _context.Funcionarios.FindAsync(id);
+                        if (funcionario != null)
+                        {
+                            reserva.Funcionarios.Add(funcionario);
+                        }
+                    }
+
+                    _context.Add(reserva);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
                 }
                 catch (Exception ex)
                 {
-                  ModelState.AddModelError(string.Empty, $"Erro ao salvar a reserva: {ex.Message}");
+                    ModelState.AddModelError(string.Empty, $"Erro ao salvar a reserva: {ex.Message}");
                 }
             }
             ViewBag.ClienteId = new SelectList(_context.Clientes, "Id", "Nome");
             ViewBag.SalaId = new SelectList(_context.Salas, "Id", "Nome");
+            ViewBag.FuncionariosIds = new MultiSelectList(_context.Funcionarios, "Id", "Nome");
             return View(reserva);
         }
 
@@ -80,14 +92,20 @@ namespace Cowork.Controllers
             if (id == null)
                 return NotFound();
 
-            var reserva = await _context.Reservas.FindAsync(id);
+            var reserva = await _context.Reservas
+                .Include(r => r.Funcionarios)
+                .FirstOrDefaultAsync(r => r.Id == id);
             if (reserva == null)
                 return NotFound();
 
-            ViewBag.ClienteId = new SelectList(_context.Clientes, "Id", "Nome");
-            ViewBag.SalaId = new SelectList(_context.Salas, "Id", "Nome");
+            reserva.FuncionariosIds = reserva.Funcionarios.Select(f => f.Id).ToList();
+
+            ViewBag.ClienteId = new SelectList(_context.Clientes, "Id", "Nome", reserva.ClienteId);
+            ViewBag.SalaId = new SelectList(_context.Salas, "Id", "Nome", reserva.SalaId);
+            ViewBag.FuncionariosIds = new MultiSelectList(_context.Funcionarios, "Id", "Nome", reserva.FuncionariosIds);
             return View(reserva);
         }
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -100,8 +118,33 @@ namespace Cowork.Controllers
             {
                 try
                 {
-                    _context.Update(reserva);
+                    var reservaToUpdate = await _context.Reservas
+                        .Include(r => r.Funcionarios)
+                        .FirstOrDefaultAsync(r => r.Id == id);
+
+                    if (reservaToUpdate == null)
+                        return NotFound();
+
+                    reservaToUpdate.DataReserva = reserva.DataReserva;
+                    reservaToUpdate.HorarioInicio = reserva.HorarioInicio;
+                    reservaToUpdate.HorarioFim = reserva.HorarioFim;
+                    reservaToUpdate.ClienteId = reserva.ClienteId;
+                    reservaToUpdate.SalaId = reserva.SalaId;
+
+                    // Atualizar funcionários
+                    reservaToUpdate.Funcionarios.Clear();
+                    foreach (var funcionarioId in reserva.FuncionariosIds)
+                    {
+                        var funcionario = await _context.Funcionarios.FindAsync(funcionarioId);
+                        if (funcionario != null)
+                        {
+                            reservaToUpdate.Funcionarios.Add(funcionario);
+                        }
+                    }
+
+                    _context.Update(reservaToUpdate);
                     await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -110,10 +153,14 @@ namespace Cowork.Controllers
                     else
                         throw;
                 }
-                return RedirectToAction(nameof(Index));
             }
+            ViewBag.ClienteId = new SelectList(_context.Clientes, "Id", "Nome", reserva.ClienteId);
+            ViewBag.SalaId = new SelectList(_context.Salas, "Id", "Nome", reserva.SalaId);
+            ViewBag.FuncionariosIds = new MultiSelectList(_context.Funcionarios, "Id", "Nome", reserva.FuncionariosIds);
             return View(reserva);
         }
+
+
 
         public async Task<IActionResult> Delete(int? id)
         {
@@ -123,6 +170,7 @@ namespace Cowork.Controllers
             var reserva = await _context.Reservas
                 .Include(r => r.Cliente)
                 .Include(r => r.Sala)
+                .Include(r => r.Funcionarios)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
             if (reserva == null)

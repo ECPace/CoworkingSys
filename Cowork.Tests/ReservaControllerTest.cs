@@ -18,7 +18,7 @@ namespace Cowork.Test
         public ReservaControllerTests()
         {
             var options = new DbContextOptionsBuilder<CoworkContext>()
-                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString()) // Usar um banco de dados em memória único para cada teste
+                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
                 .Options;
 
             _context = new CoworkContext(options);
@@ -35,15 +35,22 @@ namespace Cowork.Test
                 new Sala { Id = 2, Nome = "Sala 2", Capacidade = 20, PrecoPorHora = 200 }
             );
 
+            // Adicionar dados de teste para Funcionários
+            _context.Funcionarios.AddRange(
+                new Funcionario { Id = 1, Nome = "Funcionario 1", Cargo = "Cargo 1" },
+                new Funcionario { Id = 2, Nome = "Funcionario 2", Cargo = "Cargo 2" }
+            );
+
             _context.SaveChanges();
 
             // Adicionar dados de teste para Reservas
             _context.Reservas.AddRange(
-                new Reserva { Id = 1, ClienteId = 1, SalaId = 1, DataReserva = DateTime.Now, HorarioInicio = new TimeSpan(9, 0, 0), HorarioFim = new TimeSpan(10, 0, 0) },
-                new Reserva { Id = 2, ClienteId = 2, SalaId = 2, DataReserva = DateTime.Now, HorarioInicio = new TimeSpan(10, 0, 0), HorarioFim = new TimeSpan(11, 0, 0) }
+                new Reserva { Id = 1, ClienteId = 1, SalaId = 1, DataReserva = DateTime.Now, HorarioInicio = new TimeSpan(9, 0, 0), HorarioFim = new TimeSpan(10, 0, 0), Funcionarios = new List<Funcionario> { _context.Funcionarios.Find(1) } },
+                new Reserva { Id = 2, ClienteId = 2, SalaId = 2, DataReserva = DateTime.Now, HorarioInicio = new TimeSpan(10, 0, 0), HorarioFim = new TimeSpan(11, 0, 0), Funcionarios = new List<Funcionario> { _context.Funcionarios.Find(2) } }
             );
             _context.SaveChanges();
         }
+
 
         public void Dispose()
         {
@@ -76,7 +83,16 @@ namespace Cowork.Test
         public async Task Create_Post_ReturnsRedirectToActionResult_WhenModelStateIsValid()
         {
             // Arrange
-            var reserva = new Reserva { Id = 3, ClienteId = 1, SalaId = 1, DataReserva = DateTime.Now, HorarioInicio = new TimeSpan(11, 0, 0), HorarioFim = new TimeSpan(12, 0, 0) };
+            var reserva = new Reserva
+            {
+                Id = 3,
+                ClienteId = 1,
+                SalaId = 1,
+                DataReserva = DateTime.Now,
+                HorarioInicio = new TimeSpan(11, 0, 0),
+                HorarioFim = new TimeSpan(12, 0, 0),
+                FuncionariosIds = new List<int> { 1 }
+            };
 
             // Act
             var result = await _controller.Create(reserva);
@@ -114,7 +130,16 @@ namespace Cowork.Test
         public async Task Edit_Post_ReturnsRedirectToActionResult_WhenModelStateIsValid()
         {
             // Arrange
-            var reserva = new Reserva { Id = 1, ClienteId = 1, SalaId = 1, DataReserva = DateTime.Now, HorarioInicio = new TimeSpan(9, 0, 0), HorarioFim = new TimeSpan(11, 0, 0) };
+            var reserva = new Reserva
+            {
+                Id = 1,
+                ClienteId = 1,
+                SalaId = 1,
+                DataReserva = DateTime.Now,
+                HorarioInicio = new TimeSpan(9, 0, 0),
+                HorarioFim = new TimeSpan(11, 0, 0),
+                FuncionariosIds = new List<int> { 1 }
+            };
 
             // Desanexar todas as entidades rastreadas
             foreach (var entity in _context.ChangeTracker.Entries().ToList())
@@ -133,6 +158,7 @@ namespace Cowork.Test
                 reservaToUpdate.DataReserva = reserva.DataReserva;
                 reservaToUpdate.HorarioInicio = reserva.HorarioInicio;
                 reservaToUpdate.HorarioFim = reserva.HorarioFim;
+                reservaToUpdate.FuncionariosIds = reserva.FuncionariosIds;
 
                 // Anexar a entidade atualizada e definir seu estado como Modified
                 _context.Attach(reservaToUpdate).State = EntityState.Modified;
