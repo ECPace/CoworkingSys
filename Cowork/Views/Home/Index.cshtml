@@ -2,11 +2,62 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Bem-vindos</h1>
-    <p>O projeto Sistema de Reservas para Coworking visa oferecer uma aplicação que permita a gestão de reservas de salas de trabalho em um ambiente compartilhado. 
-       A aplicação foi desenvolvida em ASP.NET Core, com integração a uma API de mapas e funcionalidades para cadastrar clientes, funcionários, salas e reservas.
-       O sistema também faz cálculos automáticos do custo das reservas com base no preço por hora das salas e na duração da reserva. 
-       Além disso, foram implementados relacionamentos 1e N, validações de dados, e cobertura de testes para garantir a confiabilidade das operações do sistema. </p>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container text-center">
+
+    <!-- Imagem -->
+    <img src="~/img/icone.png" alt="logo" class="img-fluid mb-4" />
+    <!-- Título -->
+    <h1 class="display-4" font-weight-bold  style="color: #2D6BA1;">Bem-vindos</h1>
+
+
+   
+
+    <!-- Descrição do projeto -->
+    <p class="lead text-muted">
+        O projeto Sistema de Reservas para Coworking visa oferecer uma aplicação que permita a gestão de reservas de salas de trabalho em um ambiente compartilhado.
+        A aplicação foi desenvolvida em ASP.NET Core, com integração a uma API de mapas e funcionalidades para cadastrar clientes, funcionários, salas e reservas.
+        O sistema também faz cálculos automáticos do custo das reservas com base no preço por hora das salas e na duração da reserva.
+        Além disso, foram implementados relacionamentos 1e N, validações de dados, e cobertura de testes para garantir a confiabilidade das operações do sistema.
+    </p>
+
+    <p class="font-italic">
+        Aprenda sobre <a href="https://learn.microsoft.com/aspnet/core" class="text-primary">building Web apps with ASP.NET Core</a>.
+    </p>
 </div>
+
+<!-- Estilos Personalizados -->
+<style>
+    body {
+        font-family: 'Roboto', sans-serif;
+        color: #333;
+    }
+  
+
+    /* Texto do parágrafo */
+    .lead {
+        font-size: 1.25rem;
+        color: #555;
+        line-height: 1.6; padding-top:30px;
+        margin-top: 50px;
+        padding-right: 50px;
+        padding-left: 50px;
+    }
+
+    .font-italic {
+        font-style: italic;
+    }
+
+    /* Espaçamento para imagem */
+    .img-fluid {
+        max-width: 100%;
+        height: 200px;
+    }
+
+    /* Centralização e margin da imagem */
+    .mb-4 {
+        margin-bottom: 1.5rem;
+    }
+</style>
+
+<!-- Importando fonte do Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
