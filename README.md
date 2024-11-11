@@ -26,7 +26,7 @@ Instruções de Instalação:
 
 Clonar o Repositório
 Para começar, clone o repositório em sua máquina local: |
-git clone https://github.com/Pardalzovisk/CoworkingSys  |
+git clone https://github.com/Pardalzovisk/CoworkingSys.git  |
 cd projeto-reserva-coworking  |
 Configurar o Banco de Dados  ||
 Crie o banco de dados e aplique as migrações:  |
