@@ -30,7 +30,7 @@ Para começar, clone o repositório em sua máquina local: <br>
 git clone https://github.com/Pardalzovisk/CoworkingSys.git  <br>
 cd projeto-reserva-coworking  <br>
 <h3>Configurar o Banco de Dados</h3>
-Crie o banco de dados e aplique as migrações:  <br>
+Crie o banco de dados utilizando o seguinte código no Console de Gerenciador de Pacotes:  <br>
 update-database  <br>
 Execute o projeto com a opção "Iniciar sem depurar" do Visual Studio.
 
