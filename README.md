@@ -1,42 +1,42 @@
-Sistema de Reservas para Coworking
+<h1> Sistema de Reservas para Coworking </h1>
 
 Este é um sistema de gerenciamento de reservas para espaços de coworking, desenvolvido em ASP.NET Core. Ele permite cadastrar e gerenciar clientes, funcionários, salas e reservas, calculando automaticamente o valor da reserva com base na duração e no preço da sala. O sistema inclui uma funcionalidade de mapa para selecionar a localização das salas e faz uso de relacionamentos entre modelos para uma estrutura robusta de dados.
 
-Funcionalidades:
+<h2>Funcionalidades:</h2>
 
-Cadastro de Clientes, Salas e Funcionários. |
-Criação de Reservas com cálculo automático do valor total. |
-Visualização da localização da Sala em um mapa interativo. |
-Relacionamentos entre entidades, como Cliente, Sala e Reserva. |
-Persistência de dados em banco relacional e interface intuitiva. |
+Cadastro de Clientes, Salas e Funcionários. <br>
+Criação de Reservas com cálculo automático do valor total. <br>
+Visualização da localização da Sala em um mapa interativo. <br>
+Relacionamentos entre entidades, como Cliente, Sala e Reserva. <br>
+Persistência de dados em banco relacional e interface intuitiva. 
 
-Tecnologias Utilizadas:
+<h2>Tecnologias Utilizadas:</h2>
 
-ASP.NET Core |
-Entity Framework Core |
-Leaflet para API de Mapa |
+ASP.NET Core <br>
+Entity Framework Core <br>
+Leaflet para API de Mapa <br>
 SQL Server para armazenamento de dados
 
-Requisitos:
+<h2>Requisitos:</h2>
 
-.NET SDK 6.0 ou superior |
-SQL Server |
+.NET SDK 6.0 ou superior <br>
+SQL Server <br>
 Node.js e npm (opcional, para ferramentas frontend)
 
-Instruções de Instalação:
+<h2>Instruções de Instalação:</h2>
 
-Clonar o Repositório
-Para começar, clone o repositório em sua máquina local: |
-git clone https://github.com/Pardalzovisk/CoworkingSys.git  |
-cd projeto-reserva-coworking  |
-Configurar o Banco de Dados  ||
-Crie o banco de dados e aplique as migrações:  |
-update-database  |
-Execute o projeto com a opção "Iniciar sem depurar" do Visual Studio.  |
+<h3>Clonar o Repositório</h3>
+Para começar, clone o repositório em sua máquina local: <br>
+git clone https://github.com/Pardalzovisk/CoworkingSys.git  <br>
+cd projeto-reserva-coworking  <br>
+<h3>Configurar o Banco de Dados</h3>
+Crie o banco de dados e aplique as migrações:  <br>
+update-database  <br>
+Execute o projeto com a opção "Iniciar sem depurar" do Visual Studio.
 
-Estrutura do Projeto:
+<h2>Estrutura do Projeto:</h2>
 
-Controllers/ - Contém os controladores para gerenciar rotas e lógica de aplicação. |
-Models/ - Define as classes e modelos de dados. |
-Views/ - Contém as views para interação com o usuário. |
+Controllers/ - Contém os controladores para gerenciar rotas e lógica de aplicação. <br>
+Models/ - Define as classes e modelos de dados. <br>
+Views/ - Contém as views para interação com o usuário. <br>
 wwwroot/ - Recursos estáticos, como arquivos de CSS, JS, e mapas.
