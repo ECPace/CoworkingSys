@@ -28,7 +28,6 @@ Node.js e npm (opcional, para ferramentas frontend)
 <h3>Clonar o Repositório</h3>
 Para começar, clone o repositório em sua máquina local: <br>
 git clone https://github.com/Pardalzovisk/CoworkingSys.git  <br>
-cd projeto-reserva-coworking  <br>
 <h3>Configurar o Banco de Dados</h3>
 Crie o banco de dados utilizando o seguinte código no Console de Gerenciador de Pacotes:  <br>
 update-database  <br>
