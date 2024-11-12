@@ -21,7 +21,6 @@ namespace Cowork.Models
 
         [Required(ErrorMessage = "O horário de fim é obrigatório.")]
         [DataType(DataType.Time, ErrorMessage = "Horário de fim inválido.")]
-        [GreaterThan("HorarioInicio", ErrorMessage = "O horário de fim deve ser maior que o horário de início.")]
         [CustomValidation(typeof(Reserva), nameof(ValidateHorarioFim))]
         public TimeSpan HorarioFim { get; set; }
 
@@ -83,6 +82,10 @@ namespace Cowork.Models
             if (HorarioFim <= HorarioInicio)
             {
                 yield return new ValidationResult("O horário de fim deve ser maior que o horário de início.", new[] { nameof(HorarioFim) });
+            }
+            if ((HorarioFim - HorarioInicio).TotalMinutes < 30)
+            {
+                yield return new ValidationResult("A diferença entre o horário de início e o horário de fim deve ser de no mínimo 30 minutos.", new[] { nameof(HorarioFim) });
             }
         }
     }
