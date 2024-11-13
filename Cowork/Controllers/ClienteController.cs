@@ -33,6 +33,8 @@ namespace Cowork.Controllers
             }
 
             var cliente = await _context.Clientes
+                .Include(c => c.Reservas)
+                .ThenInclude(r => r.Sala)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (cliente == null)
             {
