@@ -1,0 +1,26 @@
+﻿@model IEnumerable<Cowork.Models.Reserva>
+
+<h3>Reservas do Cliente</h3>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Data da Reserva</th>
+            <th>Horário de Início</th>
+            <th>Horário de Fim</th>
+            <th>Sala</th>
+            <th>Valor Total</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var reserva in Model)
+        {
+            <tr>
+                <td>@reserva.DataReserva.ToShortDateString()</td>
+                <td>@reserva.HorarioInicio</td>
+                <td>@reserva.HorarioFim</td>
+                <td>@reserva.Sala?.Nome</td>
+                <td>@reserva.ValorTotal.ToString("C")</td>
+            </tr>
+        }
+    </tbody>
+</table>
