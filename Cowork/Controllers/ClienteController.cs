@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Cowork.Data;
 using Cowork.Models;
@@ -19,12 +17,13 @@ namespace Cowork.Controllers
             _context = context;
         }
 
+        // GET: Cliente
         public async Task<IActionResult> Index()
         {
-            var clientes = await _context.Clientes.ToListAsync();
-            return View(clientes);
+            return View(await _context.Clientes.ToListAsync());
         }
 
+        // GET: Cliente/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -35,7 +34,9 @@ namespace Cowork.Controllers
             var cliente = await _context.Clientes
                 .Include(c => c.Reservas)
                 .ThenInclude(r => r.Sala)
+                .AsNoTracking()
                 .FirstOrDefaultAsync(m => m.Id == id);
+
             if (cliente == null)
             {
                 return NotFound();
@@ -44,24 +45,17 @@ namespace Cowork.Controllers
             return View(cliente);
         }
 
+        // GET: Cliente/Create
         public IActionResult Create()
         {
             return View();
         }
 
+        // POST: Cliente/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Cliente cliente)
+        public async Task<IActionResult> Create([Bind("Id,Nome,Email,Telefone")] Cliente cliente)
         {
-            if (_context.Clientes.Any(c => c.Email == cliente.Email))
-            {
-                ModelState.AddModelError("Email", "O email já está em uso.");
-            }
-            if (_context.Clientes.Any(c => c.Telefone == cliente.Telefone))
-            {
-                ModelState.AddModelError("Telefone", "O telefone já está em uso.");
-            }
-
             if (ModelState.IsValid)
             {
                 _context.Add(cliente);
@@ -71,24 +65,31 @@ namespace Cowork.Controllers
             return View(cliente);
         }
 
+        // GET: Cliente/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
+            {
                 return NotFound();
+            }
 
             var cliente = await _context.Clientes.FindAsync(id);
             if (cliente == null)
+            {
                 return NotFound();
-
+            }
             return View(cliente);
         }
 
+        // POST: Cliente/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Cliente cliente)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Nome,Email,Telefone")] Cliente cliente)
         {
             if (id != cliente.Id)
+            {
                 return NotFound();
+            }
 
             if (ModelState.IsValid)
             {
@@ -99,36 +100,64 @@ namespace Cowork.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!_context.Clientes.Any(e => e.Id == cliente.Id))
+                    if (!ClienteExists(cliente.Id))
+                    {
                         return NotFound();
+                    }
                     else
+                    {
                         throw;
+                    }
                 }
                 return RedirectToAction(nameof(Index));
             }
             return View(cliente);
         }
 
+        // GET: Cliente/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
+            {
                 return NotFound();
+            }
 
-            var cliente = await _context.Clientes.FirstOrDefaultAsync(m => m.Id == id);
+            var cliente = await _context.Clientes
+                .Include(c => c.Reservas)
+                .ThenInclude(r => r.Sala)
+                .AsNoTracking()
+                .FirstOrDefaultAsync(m => m.Id == id);
+
             if (cliente == null)
+            {
                 return NotFound();
+            }
 
             return View(cliente);
         }
 
+        // POST: Cliente/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var cliente = await _context.Clientes.FindAsync(id);
-            _context.Clientes.Remove(cliente);
-            await _context.SaveChangesAsync();
+            var cliente = await _context.Clientes
+                .Include(c => c.Reservas)
+                .FirstOrDefaultAsync(c => c.Id == id);
+
+            if (cliente != null)
+            {
+                _context.Reservas.RemoveRange(cliente.Reservas); // Remove as reservas associadas
+                _context.Clientes.Remove(cliente); // Remove o cliente
+                await _context.SaveChangesAsync();
+            }
+
             return RedirectToAction(nameof(Index));
+        }
+
+        private bool ClienteExists(int id)
+        {
+            return _context.Clientes.Any(e => e.Id == id);
         }
     }
 }

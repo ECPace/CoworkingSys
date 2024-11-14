@@ -165,28 +165,38 @@ namespace Cowork.Controllers
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
+            {
                 return NotFound();
+            }
 
-            var reserva = await _context.Reservas
-                .Include(r => r.Cliente)
-                .Include(r => r.Sala)
-                .Include(r => r.Funcionarios)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var cliente = await _context.Clientes
+                .Include(c => c.Reservas)
+                .ThenInclude(r => r.Sala)
+                .FirstOrDefaultAsync(c => c.Id == id);
 
-            if (reserva == null)
+            if (cliente == null)
+            {
                 return NotFound();
+            }
 
-            return View(reserva);
+            return View(cliente);
         }
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var reserva = await _context.Reservas.FindAsync(id);
-            _context.Reservas.Remove(reserva);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            var cliente = await _context.Clientes
+                                        .Include(c => c.Reservas)
+                                        .FirstOrDefaultAsync(c => c.Id == id);
+
+            if (cliente != null)
+            {
+                _context.Clientes.Remove(cliente);
+                await _context.SaveChangesAsync();
+            }
+
+            return RedirectToAction(nameof(Index)); // Redireciona para a lista de clientes
         }
     }
 }

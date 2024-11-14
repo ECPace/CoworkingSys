@@ -24,16 +24,17 @@ namespace Cowork.Models
         [CustomValidation(typeof(Reserva), nameof(ValidateHorarioFim))]
         public TimeSpan HorarioFim { get; set; }
 
+        [Required(ErrorMessage = "O cliente é obrigatório.")]
         public int ClienteId { get; set; }
-
         public Cliente? Cliente { get; set; }
 
+        [Required(ErrorMessage = "A sala é obrigatória.")]
         public int SalaId { get; set; }
-
         public Sala? Sala { get; set; }
 
-        public ICollection<Funcionario>? Funcionarios { get; set; }
+        public ICollection<Funcionario>? Funcionarios { get; set; } = new List<Funcionario>();
 
+        [Display(Name = "Funcionários")]
         public List<int> FuncionariosIds { get; set; } = new List<int>();
 
         public decimal ValorTotal
