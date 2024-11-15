@@ -31,6 +31,7 @@ namespace Cowork.Models
         [Required(ErrorMessage = "A sala é obrigatória.")]
         public int SalaId { get; set; }
         public Sala? Sala { get; set; }
+        public bool AvisoExclusaoFuncionario { get; set; } = false;
 
         public ICollection<Funcionario>? Funcionarios { get; set; } = new List<Funcionario>();
 

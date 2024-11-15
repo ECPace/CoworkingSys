@@ -25,6 +25,7 @@ namespace Cowork.Controllers
             return View(await reservas.ToListAsync());
         }
 
+        // GET: Reserva/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -36,15 +37,22 @@ namespace Cowork.Controllers
                 .Include(r => r.Cliente)
                 .Include(r => r.Sala)
                 .Include(r => r.Funcionarios)
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .AsNoTracking()
+                .FirstOrDefaultAsync(r => r.Id == id);
 
             if (reserva == null)
             {
                 return NotFound();
             }
 
+            if (reserva.AvisoExclusaoFuncionario)
+            {
+                ViewBag.AvisoExclusaoFuncionario = "Um ou mais funcionários associados a esta reserva foram removidos.";
+            }
+
             return View(reserva);
         }
+
         public IActionResult Create()
         {
             ViewBag.ClienteId = new SelectList(_context.Clientes, "Id", "Nome");
@@ -160,8 +168,6 @@ namespace Cowork.Controllers
             return View(reserva);
         }
 
-
-
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -169,34 +175,36 @@ namespace Cowork.Controllers
                 return NotFound();
             }
 
-            var cliente = await _context.Clientes
-                .Include(c => c.Reservas)
-                .ThenInclude(r => r.Sala)
-                .FirstOrDefaultAsync(c => c.Id == id);
+            var reserva = await _context.Reservas
+                .Include(r => r.Funcionarios)
+                .Include(r => r.Cliente)
+                .Include(r => r.Sala)
+                .FirstOrDefaultAsync(m => m.Id == id);
 
-            if (cliente == null)
+            if (reserva == null)
             {
                 return NotFound();
             }
 
-            return View(cliente);
+            return View(reserva);
         }
-
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var cliente = await _context.Clientes
-                                        .Include(c => c.Reservas)
-                                        .FirstOrDefaultAsync(c => c.Id == id);
+            var reserva = await _context.Reservas
+                .Include(r => r.Funcionarios)
+                .FirstOrDefaultAsync(r => r.Id == id);
 
-            if (cliente != null)
+            if (reserva == null)
             {
-                _context.Clientes.Remove(cliente);
-                await _context.SaveChangesAsync();
+                return NotFound();
             }
 
-            return RedirectToAction(nameof(Index)); // Redireciona para a lista de clientes
+            _context.Reservas.Remove(reserva);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index));
         }
     }
 }

@@ -2,61 +2,66 @@
 
 @{
     ViewData["Title"] = "Detalhes da Reserva";
-    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h1>Detalhes da Reserva</h1>
+
+@if (ViewBag.AvisoExclusaoFuncionario != null)
+{
+    <div class="alert alert-warning">
+        @ViewBag.AvisoExclusaoFuncionario
+    </div>
+}
 
 <div>
     <h4>Reserva</h4>
     <hr />
     <dl class="row">
-        <dt class="col-sm-2">
-            Data da Reserva
-        </dt>
-        <dd class="col-sm-10">
-            @Model.DataReserva.ToShortDateString()
-        </dd>
-        <dt class="col-sm-2">
-            Horário de Início
-        </dt>
-        <dd class="col-sm-10">
-            @Model.HorarioInicio
-        </dd>
-        <dt class="col-sm-2">
-            Horário de Fim
-        </dt>
-        <dd class="col-sm-10">
-            @Model.HorarioFim
-        </dd>
-        <dt class="col-sm-2">
-            Cliente
-        </dt>
-        <dd class="col-sm-10">
-            @Model.Cliente.Nome
-        </dd>
-        <dt class="col-sm-2">
-            Sala
-        </dt>
-        <dd class="col-sm-10">
-            @Model.Sala.Nome
-        </dd>
+        <dt class="col-sm-2">Cliente</dt>
+        <dd class="col-sm-10">@Model.Cliente?.Nome</dd>
+
+        <dt class="col-sm-2">Sala</dt>
+        <dd class="col-sm-10">@Model.Sala?.Nome</dd>
+
+        <dt class="col-sm-2">Data</dt>
+        <dd class="col-sm-10">@Model.DataReserva.ToShortDateString()</dd>
+
+        <dt class="col-sm-2">Horário</dt>
+        <dd class="col-sm-10">@Model.HorarioInicio - @Model.HorarioFim</dd>
+
         <dt class="col-sm-2">Valor Total</dt>
         <dd class="col-sm-10">@Model.ValorTotal.ToString("C")</dd>
-        <dt class="col-sm-2">
-            Funcionários
-        </dt>
+
+        <dt class="col-sm-2">Funcionários</dt>
         <dd class="col-sm-10">
-            <ul>
-                @foreach (var funcionario in Model.Funcionarios)
-                {
-                    <li>@funcionario.Nome</li>
-                }
-            </ul>
+            @if (Model.Funcionarios != null && Model.Funcionarios.Any())
+            {
+                <ul>
+                    @foreach (var funcionario in Model.Funcionarios)
+                    {
+                        <li>@funcionario.Nome (@funcionario.Cargo)</li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <span>Nenhum funcionário associado.</span>
+            }
+
+            @if (ViewBag.FuncionariosRemovidos != null && ViewBag.FuncionariosRemovidos.Count > 0)
+            {
+                <div class="alert alert-warning mt-3">
+                    <strong>Atenção:</strong> Os seguintes funcionários foram removidos desta reserva:
+                    <ul>
+                        @foreach (var funcionarioRemovido in ViewBag.FuncionariosRemovidos)
+                        {
+                            <li>@funcionarioRemovido.Nome (@funcionarioRemovido.Cargo)</li>
+                        }
+                    </ul>
+                </div>
+            }
         </dd>
     </dl>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Editar</a> |
-    <a asp-action="Index">Voltar para a Lista</a>
-</div>
+
+<a asp-action="Index" class="btn btn-secondary">Voltar para a Lista</a>

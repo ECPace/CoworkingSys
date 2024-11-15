@@ -110,13 +110,31 @@ namespace Cowork.Controllers
             return View(funcionario);
         }
 
+        // POST: Funcionario/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var funcionario = await _context.Funcionarios.FindAsync(id);
+            var funcionario = await _context.Funcionarios
+                .Include(f => f.Reservas)
+                .ThenInclude(r => r.Funcionarios)
+                .FirstOrDefaultAsync(f => f.Id == id);
+
+            if (funcionario == null)
+            {
+                return NotFound();
+            }
+
+            // Atualizar reservas relacionadas ao funcionário
+            foreach (var reserva in funcionario.Reservas)
+            {
+                reserva.Funcionarios.Remove(funcionario);
+                reserva.AvisoExclusaoFuncionario = true; // Flag para indicar que um funcionário foi excluído
+            }
+
             _context.Funcionarios.Remove(funcionario);
             await _context.SaveChangesAsync();
+
             return RedirectToAction(nameof(Index));
         }
     }
