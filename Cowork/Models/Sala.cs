@@ -16,6 +16,7 @@ namespace Cowork.Models
 
         [Required(ErrorMessage = "O preço por hora é obrigatório.")]
         [Range(0.01, 1000.00, ErrorMessage = "O preço por hora deve estar entre 0,01 e 1000,00.")]
+        [Display(Name = "Preço por hora")]
         public decimal PrecoPorHora { get; set; }
 
         public double? Latitude { get; set; }
